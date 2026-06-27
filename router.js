@@ -52,7 +52,7 @@ router.get('/centers/rooms/:roomId/content', sureToken, isCenterAdmin, contentRo
 router.put('/content/:id', sureToken, isCenterAdmin, contentRoutes.updateContent);
 router.delete('/content/:id', sureToken, isCenterAdmin, contentRoutes.deleteContent);
 router.put('/rooms/:roomId/content/reorder', sureToken, isCenterAdmin, contentRoutes.reorderContent);
-router.get('/discovery/centers/teachers/:id', sureToken,isCenterAdmin ,centerRoutes.LookupTeacherById);
+router.get('/discovery/centers/teachers/:teacherId', sureToken, isCenterAdmin, centerRoutes.LookupTeacherById);
 
 
 router.get('/teachers/:id', StudentRoutes.DetelsOfTeacher);
