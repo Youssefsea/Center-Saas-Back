@@ -70,7 +70,7 @@ const LookupTeacherById = async (req, res) => {
     try {
         const centerId = req.user.centerId;
         const teacherId = req.params.teacherId?.trim();
-
+console.log('LookupTeacherById called with centerId:', centerId, 'teacherId:', teacherId);
         if (!teacherId) {
             return sendError(res, 400, 'VALIDATION_ERROR', 'Teacher ID is required');
         }
