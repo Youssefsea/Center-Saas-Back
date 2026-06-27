@@ -52,6 +52,7 @@ router.get('/centers/rooms/:roomId/content', sureToken, isCenterAdmin, contentRo
 router.put('/content/:id', sureToken, isCenterAdmin, contentRoutes.updateContent);
 router.delete('/content/:id', sureToken, isCenterAdmin, contentRoutes.deleteContent);
 router.put('/rooms/:roomId/content/reorder', sureToken, isCenterAdmin, contentRoutes.reorderContent);
+router.get('/discovery/centers/teachers/:id', sureToken,isCenterAdmin ,centerRoutes.LookupTeacherById);
 
 
 router.get('/teachers/:id', StudentRoutes.DetelsOfTeacher);
@@ -73,7 +74,6 @@ router.get('/discovery/teachers/search', StudentRoutes.SearchForTeachers);
 router.get('/discovery/subjects', StudentRoutes.GetAllSubjects);
 router.get('/discovery/centers/:id/sessions', StudentRoutes.GetAllSessionsOFCenter);
 router.get('/discovery/centers/:id', StudentRoutes.DetelsOfCenter);
-router.get('/discovery/centers/teachers/:id',centerRoutes.LookupTeacherById);
 
 
 router.post('/bookings', sureToken, isStudent, bookingRoutes.bookSession); // ✅ FIXED: ensured isStudent guard on student-only endpoint
