@@ -73,6 +73,7 @@ router.get('/discovery/teachers/search', StudentRoutes.SearchForTeachers);
 router.get('/discovery/subjects', StudentRoutes.GetAllSubjects);
 router.get('/discovery/centers/:id/sessions', StudentRoutes.GetAllSessionsOFCenter);
 router.get('/discovery/centers/:id', StudentRoutes.DetelsOfCenter);
+router.get('/discovery/centers/teachers/:id',centerRoutes.LookupTeacherById);
 
 
 router.post('/bookings', sureToken, isStudent, bookingRoutes.bookSession); // ✅ FIXED: ensured isStudent guard on student-only endpoint

@@ -66,6 +66,58 @@ catch(err)
 }
 
 
+const LookupTeacherById = async (req, res) => {
+    try {
+        const centerId = req.user.centerId;
+        const teacherId = req.params.teacherId?.trim();
+
+        if (!teacherId) {
+            return sendError(res, 400, 'VALIDATION_ERROR', 'Teacher ID is required');
+        }
+
+        const teacherResult = await pool.query(`
+            SELECT 
+                t.id AS teacher_id,
+                u.name AS teacher_name,
+                u.avatar_url,
+                t.bio,
+                t.subjects,
+                t.grade_levels,
+                t.rating,
+                t.total_reviews,
+                t.is_verified
+            FROM teachers t
+            JOIN users u ON u.id = t.user_id
+            WHERE t.id = $1
+        `, [teacherId]);
+
+        if (teacherResult.rows.length === 0) {
+            return sendError(res, 404, 'NOT_FOUND', 'لا يوجد مدرس بهذا الـ ID');
+        }
+
+        const alreadyInCenter = await pool.query(
+            `SELECT id, is_active 
+             FROM center_teachers 
+             WHERE center_id = $1 AND teacher_id = $2`,
+            [centerId, teacherId]
+        );
+
+        const inCenter = alreadyInCenter.rows.length > 0;
+        const isActive = inCenter ? alreadyInCenter.rows[0].is_active : false;
+
+        res.status(200).json({
+            success: true,
+            teacher: teacherResult.rows[0],
+            already_in_center: inCenter,
+            is_active: isActive
+        });
+
+    } catch (error) {
+        console.error('Error looking up teacher:', error);
+        res.status(500).json({ success: false, error: { code: 'SERVER_ERROR', message: 'Internal server error' } });
+    }
+};
+
 const AddTeacherToCenter = async (req, res) => {
 try
 {
@@ -103,6 +155,7 @@ catch(err)
 }
 
 }
+
 
 
 const RemoveTeacherFromCenter = async (req, res) => {
@@ -583,6 +636,7 @@ module.exports = {
     updateSessionInCenterWithoutConflictCheck,
     deleteSessionFromCenter,
     GetAllSessionsOfCenter,
-    cancelSession,getCenterProfile
+    cancelSession,getCenterProfile,
+    LookupTeacherById
 };
 
